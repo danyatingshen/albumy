@@ -45,7 +45,7 @@ Test account:
 
 
 ## API creditials
-- Create your Azure Computer vision instance by following step here: 
+- Create your Azure Computer vision instance by following step here: https://www.youtube.com/watch?v=1VB_QrHm_nY
 - Cretae `secrete.json` file in this path with this path `albumy/blueprints/secrete.json` so it can read here https://github.com/danyatingshen/albumy/blob/606f97283163b4fc1b5f89bad9675650fa88bc0c/albumy/blueprints/alternative.py#L9. The format of the secrete should be 
 ```
 {
