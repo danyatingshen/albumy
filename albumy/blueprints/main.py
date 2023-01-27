@@ -12,7 +12,7 @@ from flask import render_template, flash, redirect, url_for, current_app, \
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 
-from albumy.blueprints.alternative import get_alternative_text
+from albumy.blueprints.alternative import get_ml_fields
 from albumy.decorators import confirm_required, permission_required
 from albumy.extensions import db
 from albumy.forms.main import DescriptionForm, TagForm, CommentForm
@@ -126,10 +126,10 @@ def upload():
         # save picture locally
         local_path = os.path.join(current_app.config['ALBUMY_UPLOAD_PATH'], filename)
         f.save(local_path)
-        file_alternative_text = get_alternative_text(local_path)
+        # add description and tag here
+        file_alternative_text, file_tags = get_ml_fields(local_path)
         filename_s = resize_image(f, filename, current_app.config['ALBUMY_PHOTO_SIZE']['small'])
         filename_m = resize_image(f, filename, current_app.config['ALBUMY_PHOTO_SIZE']['medium'])
-        # add description field here
         photo = Photo(
             filename=filename,
             description=file_alternative_text,
@@ -137,8 +137,19 @@ def upload():
             filename_m=filename_m,
             author=current_user._get_current_object()
         )
+        # save photo
         db.session.add(photo)
         db.session.commit()
+        # save tags
+        for name in file_tags:
+            tag = Tag.query.filter_by(name=name).first()
+            if tag is None:
+                tag = Tag(name=name)
+                db.session.add(tag)
+                db.session.commit()
+            if tag not in photo.tags:
+                photo.tags.append(tag)
+                db.session.commit()
     return render_template('main/upload.html')
 
 
