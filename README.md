@@ -12,8 +12,13 @@ Demo: http://albumy.helloflask.com
 
 clone:
 ```
-$ git clone https://github.com/greyli/albumy.git
+$ git clone https://github.com/danyatingshen/albumy.git
 $ cd albumy
+```
+Install/update to the correct python version:
+```
+$ python --version 
+Python 3.10.9
 ```
 create & activate virtual env then install dependency:
 
